@@ -10,21 +10,23 @@ final class NetworkManager {
         static let apikey = "api_key"
         static let language = "language"
         static let id = "id"
+        static let page = "page"
     }
 
     // MARK: - Public methods
 
-    func fetchPopularyResult(completion: @escaping (Result<Results, Error>) -> ()) {
+    func fetchPopularyResult(_ currentPage: Int, completion: @escaping (Result<Results, Error>) -> ()) {
         let urlString = Url.baseUrl + Url.populary
         guard var url = URL(string: urlString) else { return }
         url.append(queryItems: [
             URLQueryItem(name: Constants.apikey, value: Url.apiKey),
             URLQueryItem(name: Constants.language, value: Url.suffixRu),
+            URLQueryItem(name: Constants.page, value: String(currentPage)),
         ])
         getJson(url: url, completion: completion)
     }
 
-    func fetchTopRatedResult(completion: @escaping (Result<Results, Error>) -> ()) {
+    func fetchTopRatedResult(_ currentPage: Int, completion: @escaping (Result<Results, Error>) -> ()) {
         let urlString = Url.baseUrl + Url.topRated
         guard var url = URL(string: urlString) else { return }
         url.append(queryItems: [
@@ -34,7 +36,7 @@ final class NetworkManager {
         getJson(url: url, completion: completion)
     }
 
-    func fetchUpComingResult(completion: @escaping (Result<Results, Error>) -> ()) {
+    func fetchUpComingResult(_ currentPage: Int, completion: @escaping (Result<Results, Error>) -> ()) {
         let urlString = Url.baseUrl + Url.upComing
         guard var url = URL(string: urlString) else { return }
         url.append(queryItems: [

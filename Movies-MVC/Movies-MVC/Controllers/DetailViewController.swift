@@ -5,28 +5,29 @@ import UIKit
 
 // Описание детальной информации по фильму
 final class DetailViewController: UIViewController {
+    private enum Constants {
+        static let backgroundView = "backGround"
+        static let emptyString = ""
+        static let cast = "В ролях:"
+        static let noCast = "И актеров тут нет(("
+    }
+
     // MARK: - Private Visual Components
 
+    private var backgroundView = UIImageView()
     private let posterImageView = UIImageView()
-    private let testImageView = UIImageView()
+    private let castImageView = UIImageView()
     private let descriptionLabel = UILabel()
-    private let actorsDetailScrollVew = UIScrollView()
+    private let castLabel = UILabel()
+    private let movieDetailScrollVew = UIScrollView()
 
     // MARK: - Public Properties
 
-    var imageName = ""
-    var movieName = ""
-    var movieDescription = ""
-    var actorNames = [""]
-    var actorImageNames: [String] = [""] {
-        didSet {
-            createActors()
-            print(actorImageNames.count)
-        }
-    }
-
-    var images: [UIImageView] = []
-//     var testImage: UIImageView = .init(image: UIImage(named: ""))
+    var imageName = Constants.emptyString
+    var movieName = Constants.emptyString
+    var movieDescription = Constants.emptyString
+    var actorNames = [Constants.emptyString]
+    var actorImageNames: [String] = [Constants.emptyString]
 
     // MARK: - Private Properties
 
@@ -57,11 +58,15 @@ final class DetailViewController: UIViewController {
     // MARK: - Private Methods
 
     private func configureUI() {
-        view.backgroundColor = .systemMint
-        configurePosterImageView()
-        configureDescriptionLabel()
-        configureTestView()
-//        createActors()
+        setBackgroundImage()
+        configureActorsDetailScrollVew()
+    }
+
+    private func setBackgroundImage() {
+        view.backgroundColor = .systemBackground
+        view.addSubview(backgroundView)
+        backgroundView = UIImageView(frame: CGRect(origin: .zero, size: view.bounds.size))
+        backgroundView.image = UIImage(named: Constants.backgroundView)
     }
 
     private func configurePosterImageView() {
@@ -69,9 +74,9 @@ final class DetailViewController: UIViewController {
         posterImageView.contentMode = .scaleAspectFill
         posterImageView.clipsToBounds = true
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(posterImageView)
+        movieDetailScrollVew.addSubview(posterImageView)
         NSLayoutConstraint.activate([
-            posterImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            posterImageView.topAnchor.constraint(equalTo: movieDetailScrollVew.topAnchor, constant: 10),
             posterImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             posterImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.7),
             posterImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5)
@@ -84,33 +89,60 @@ final class DetailViewController: UIViewController {
         descriptionLabel.numberOfLines = 0
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        view.addSubview(descriptionLabel)
+        movieDetailScrollVew.addSubview(descriptionLabel)
         NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: posterImageView.bottomAnchor, constant: 10),
             descriptionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            descriptionLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
-            // descriptionLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3)
+            descriptionLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9)
+        ])
+    }
+
+    private func configureCastLabel() {
+        if actorNames.count == 0 {
+            castLabel.text = Constants.noCast
+        } else {
+            castLabel.text = Constants.cast
+        }
+        castLabel.textAlignment = .center
+        castLabel.translatesAutoresizingMaskIntoConstraints = false
+        movieDetailScrollVew.addSubview(castLabel)
+        NSLayoutConstraint.activate([
+            castLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 30),
+            castLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            castLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3)
         ])
     }
 
     private func configureActorsDetailScrollVew() {
+        movieDetailScrollVew.showsVerticalScrollIndicator = false
+        view.addSubview(backgroundView)
+        movieDetailScrollVew.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(movieDetailScrollVew)
         NSLayoutConstraint.activate([
-            actorsDetailScrollVew.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
-            testImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            testImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
-            testImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5)
+            movieDetailScrollVew.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            movieDetailScrollVew.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            movieDetailScrollVew.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            movieDetailScrollVew.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-    
-    private func configureTestView() {
-        testImageView.loadImage(baseUrlString: Url.imagePath, urlImage: actorImageNames[5])
-        testImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(testImageView)
-        NSLayoutConstraint.activate([
-            testImageView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10),
-            testImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            testImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9),
-            testImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5)
-        ])
+        configurePosterImageView()
+        configureDescriptionLabel()
+        configureCastLabel()
+        var actors: [ActorView] = []
+        for (index, actorDetails) in actorNames.enumerated() {
+            let actor = ActorView()
+            actor.configureView(actorDetails, actorImageNames[index])
+            actors.append(actor)
+        }
+
+        var yCoord = view.bounds.height / 2 + 90
+        if descriptionLabel.text?.count != 0 {
+            yCoord += Double((descriptionLabel.text?.count ?? 0) / 28 * 20)
+        }
+        for actor in actors {
+            actor.frame = CGRect(x: 0, y: yCoord, width: view.bounds.width, height: view.bounds.width)
+            movieDetailScrollVew.addSubview(actor)
+            yCoord += view.bounds.width - 50
+        }
+        movieDetailScrollVew.contentSize = CGSize(width: view.bounds.width, height: yCoord)
     }
 }

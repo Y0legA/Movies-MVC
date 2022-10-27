@@ -13,6 +13,7 @@ enum Url {
     static let suffixRu = "ru-RU"
     static let movie = "/3/movie/"
     static let credits = "/credits"
+    static let page = "page"
 
     static let moviePopular = "/3/discover/movie?primary_release_year=2057&sort_by=vote_average.desc"
 }

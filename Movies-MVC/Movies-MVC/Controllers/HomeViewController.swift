@@ -13,9 +13,7 @@ final class HomeViewController: UIViewController {
 
         static let backGroundView = "backGround"
         static let backGroundColor = "backgroundColor"
-        static let title = "Movies"
         static let movieIdentifier = "movie"
-        static let topTypeMovieSC = 0.0
         static let heightButton = 30.0
     }
 
@@ -37,6 +35,8 @@ final class HomeViewController: UIViewController {
         Constants.MovieTypes.upComing.rawValue
     ]
     private var movies: [Movie] = []
+    private var currentPage = 0
+    private var currentRow = 0
 
     // MARK: - LifeCycle
 
@@ -50,37 +50,46 @@ final class HomeViewController: UIViewController {
     // MARK: - Private IBAction
 
     @objc private func showPopularyAction() {
-        networkManager.fetchPopularyResult { movies in
+        currentPage = 1
+        currentRow = 0
+        movies = []
+        networkManager.fetchPopularyResult(currentPage) { movies in
             DispatchQueue.main.async {
                 guard let result = try? movies.get().results else { return }
                 self.movies = result
                 self.title = Constants.MovieTypes.popular.rawValue
                 self.tableView.reloadData()
-                self.scrollToTop()
+                self.scrollToTop(0)
             }
         }
     }
 
     @objc private func showTopRatedAction() {
-        networkManager.fetchTopRatedResult { movies in
+        currentPage = 1
+        currentRow = 0
+        movies = []
+        networkManager.fetchTopRatedResult(currentPage) { movies in
             DispatchQueue.main.async {
                 guard let result = try? movies.get().results else { return }
                 self.movies = result
                 self.title = Constants.MovieTypes.topRated.rawValue
                 self.tableView.reloadData()
-                self.scrollToTop()
+                self.scrollToTop(0)
             }
         }
     }
 
     @objc private func showUpComingAction() {
-        networkManager.fetchUpComingResult { movies in
+        currentPage = 1
+        currentRow = 0
+        movies = []
+        networkManager.fetchUpComingResult(currentPage) { movies in
             DispatchQueue.main.async {
                 guard let result = try? movies.get().results else { return }
                 self.movies = result
                 self.title = Constants.MovieTypes.upComing.rawValue
                 self.tableView.reloadData()
-                self.scrollToTop()
+                self.scrollToTop(0)
             }
         }
     }
@@ -94,8 +103,8 @@ final class HomeViewController: UIViewController {
 
     // MARK: - Private Methods
 
-    private func scrollToTop() {
-        let topRow = IndexPath(row: 0, section: 0)
+    private func scrollToTop(_ row: Int) {
+        let topRow = IndexPath(row: row, section: 0)
         tableView.scrollToRow(at: topRow, at: .top, animated: true)
     }
 
@@ -104,33 +113,28 @@ final class HomeViewController: UIViewController {
 //        tableView.refreshControl = refreshControl
 //    }
 
-    private func fetchData() {
-        networkManager.fetchPopularyResult { movie in
-            DispatchQueue.main.async {
-                guard let result = try? movie.get().results else { return }
-                self.movies = result
-                self.tableView.reloadData()
-            }
-        }
-    }
+//    private func fetchData() {
+//        networkManager.fetchPopularyResult { movie in
+//            DispatchQueue.main.async {
+//                guard let result = try? movie.get().results else { return }
+//                self.movies = result
+//                self.tableView.reloadData()
+//            }
+//        }
+//    }
 
     private func configureUI() {
-        configureNavBar()
         configureView()
         configurePopularButton()
         configureTopRatedButton()
         configureUpComingButton()
         configureTableview()
-        fetchData()
+        showPopularyAction()
         uploadDataAction()
     }
 
     private func configureView() {
         view.backgroundColor = UIColor(named: Constants.backGroundColor)
-    }
-
-    private func configureNavBar() {
-        title = Constants.title
     }
 
     private func configurePopularButton() {
@@ -224,6 +228,51 @@ extension HomeViewController: UITableViewDataSource {
                 detailVC.actorNames = movieDetail.map { $0.name ?? "" }
                 detailVC.actorImageNames = movieDetail.map { $0.profilePath ?? "" }
                 self.navigationController?.pushViewController(detailVC, animated: true)
+            }
+        }
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == currentRow + 18 {
+            switch title {
+            case Constants.MovieTypes.popular.rawValue:
+                currentPage += 1
+                networkManager.fetchPopularyResult(currentPage) { movies in
+                    DispatchQueue.main.async {
+                        guard let result = try? movies.get().results else { return }
+                        self.movies += result
+                        print(self.movies.count)
+                        self.currentRow += 20
+                        self.tableView.reloadData()
+                        print(self.currentRow)
+                    }
+                }
+            case Constants.MovieTypes.topRated.rawValue:
+                currentPage += 1
+                networkManager.fetchTopRatedResult(currentPage) { movies in
+                    DispatchQueue.main.async {
+                        guard let result = try? movies.get().results else { return }
+                        self.movies += result
+                        print(self.movies.count)
+                        self.currentRow += 20
+                        self.tableView.reloadData()
+                        print(self.currentRow)
+                    }
+                }
+            case Constants.MovieTypes.upComing.rawValue:
+                currentPage += 1
+                networkManager.fetchUpComingResult(currentPage) { movies in
+                    DispatchQueue.main.async {
+                        guard let result = try? movies.get().results else { return }
+                        self.movies += result
+                        print(self.movies.count)
+                        self.currentRow += 20
+                        self.tableView.reloadData()
+                        print(self.currentRow)
+                    }
+                }
+            default:
+                break
             }
         }
     }

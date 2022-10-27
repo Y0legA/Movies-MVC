@@ -11,6 +11,7 @@ final class MovieTableViewCell: UITableViewCell {
         static let fontArial = "Arial"
         static let height = 30.0
         static let backGroundColor = "backgroundColor"
+        static let noOverView = "У этого фильма нет описания"
     }
 
     // MARK: Visual Properties
@@ -38,10 +39,15 @@ final class MovieTableViewCell: UITableViewCell {
 
     func setDescription(model: Movie) {
         movieNameLabel.text = model.title
-        movieDescriptionLabel.text = model.overview
+
         ratingLabel.text = String(model.voteAverage)
         reliseLabel.text = model.releaseDate
         movieImageView.loadImage(baseUrlString: Url.imagePath, urlImage: model.poster)
+        guard model.overview.isEmpty else {
+            movieDescriptionLabel.text = model.overview
+            return
+        }
+        movieDescriptionLabel.text = Constants.noOverView
     }
 
     // MARK: Private Methods

@@ -14,6 +14,8 @@ extension UIImageView {
                     if let data {
                         if let image = UIImage(data: data) {
                             self.image = image
+                        } else {
+                            self.image = UIImage(named: "noPhoto")
                         }
                     }
                 }
