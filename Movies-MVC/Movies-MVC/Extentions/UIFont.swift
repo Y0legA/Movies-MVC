@@ -28,6 +28,10 @@ extension UIFont {
         UIFont(name: "Avenir Next Demi Bold", size: 14)
     }
 
+    static func avenirNextDemiBold16() -> UIFont? {
+        UIFont(name: "Avenir Next Demi Bold", size: 16)
+    }
+
     static func avenirNextDemiBold20() -> UIFont? {
         UIFont(name: "Avenir Next Demi Bold", size: 20)
     }

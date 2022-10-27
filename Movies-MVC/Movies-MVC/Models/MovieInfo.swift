@@ -5,17 +5,17 @@ import Foundation
 
 // описание модели для ячейки фильмов
 struct MovieInfo {
-    let name: String
-    let text: String
-    let description: String
-    let rating: String
-    let relize: String
+    let posterName: String
+    let titleName: String
+    let descriptionName: String
+    let ratingName: String
+    let relizeName: String
 
     init(_ name: String, _ text: String, _ description: String, _ rating: String, _ relize: String) {
-        self.name = name
-        self.text = text
-        self.description = description
-        self.rating = rating
-        self.relize = relize
+        posterName = name
+        titleName = text
+        descriptionName = description
+        ratingName = rating
+        relizeName = relize
     }
 }

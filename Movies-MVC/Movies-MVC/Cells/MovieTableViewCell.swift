@@ -10,6 +10,7 @@ final class MovieTableViewCell: UITableViewCell {
         static let movieIdentifier = "movie"
         static let fontArial = "Arial"
         static let height = 30.0
+        static let backGroundColor = "backgroundColor"
     }
 
     // MARK: Visual Properties
@@ -35,12 +36,12 @@ final class MovieTableViewCell: UITableViewCell {
 
     // MARK: Public Methods
 
-    func configure(model: MovieInfo) {
-        movieImageView.image = UIImage(named: model.name)
-        movieNameLabel.text = model.text
-        movieDescriptionLabel.text = model.description
-        ratingLabel.text = model.rating
-        reliseLabel.text = model.relize
+    func setDescription(model: Movie) {
+        movieNameLabel.text = model.title
+        movieDescriptionLabel.text = model.overview
+        ratingLabel.text = String(model.voteAverage)
+        reliseLabel.text = model.releaseDate
+        movieImageView.loadImage(baseUrlString: Url.imagePath, urlImage: model.poster)
     }
 
     // MARK: Private Methods
@@ -73,6 +74,8 @@ final class MovieTableViewCell: UITableViewCell {
     private func configureMovieImageView() {
         contView.addSubview(movieImageView)
         movieImageView.contentMode = .scaleToFill
+        movieImageView.layer.cornerRadius = 20
+        movieImageView.clipsToBounds = true
         movieImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             movieImageView.topAnchor.constraint(equalTo: contView.topAnchor),
@@ -84,7 +87,7 @@ final class MovieTableViewCell: UITableViewCell {
 
     private func configureMovieNameLabel() {
         contView.addSubview(movieNameLabel)
-        movieNameLabel.font = UIFont.avenirNextDemiBold20()
+        movieNameLabel.font = UIFont.avenirNextDemiBold16()
         movieNameLabel.textAlignment = .center
         movieNameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -99,7 +102,7 @@ final class MovieTableViewCell: UITableViewCell {
         contView.addSubview(movieDescriptionLabel)
         movieDescriptionLabel.font = UIFont.avenirNext14()
         movieDescriptionLabel.numberOfLines = 0
-        movieDescriptionLabel.textAlignment = .justified
+        movieDescriptionLabel.textAlignment = .natural
         movieDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             movieDescriptionLabel.topAnchor.constraint(equalTo: movieNameLabel.bottomAnchor),
@@ -111,12 +114,16 @@ final class MovieTableViewCell: UITableViewCell {
 
     private func configureRatingLabel() {
         contView.addSubview(ratingLabel)
-        ratingLabel.textAlignment = .left
+        ratingLabel.textAlignment = .center
+        ratingLabel.backgroundColor = UIColor(named: Constants.backGroundColor)
+        ratingLabel.layer.cornerRadius = 7
+        ratingLabel.layer.borderWidth = 1
+        ratingLabel.layer.borderColor = UIColor.systemMint.cgColor
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             ratingLabel.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor),
-            ratingLabel.leadingAnchor.constraint(equalTo: movieImageView.trailingAnchor, constant: 10),
-            ratingLabel.widthAnchor.constraint(equalTo: movieDescriptionLabel.widthAnchor, multiplier: 0.5),
+            ratingLabel.leadingAnchor.constraint(equalTo: movieImageView.trailingAnchor, constant: 30),
+            ratingLabel.widthAnchor.constraint(equalTo: movieDescriptionLabel.widthAnchor, multiplier: 0.1),
             // ratingLabel.heightAnchor.constraint(equalTo: contView.heightAnchor, multiplier: 0.1),
             ratingLabel.bottomAnchor.constraint(equalTo: contView.bottomAnchor, constant: -10)
         ])
@@ -124,12 +131,12 @@ final class MovieTableViewCell: UITableViewCell {
 
     private func configureRelizeLabel() {
         contView.addSubview(reliseLabel)
-        reliseLabel.textAlignment = .right
+        reliseLabel.textAlignment = .center
         reliseLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             reliseLabel.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor),
             reliseLabel.trailingAnchor.constraint(equalTo: contView.trailingAnchor, constant: -10),
-            reliseLabel.widthAnchor.constraint(equalTo: ratingLabel.widthAnchor),
+            reliseLabel.widthAnchor.constraint(equalTo: movieDescriptionLabel.widthAnchor, multiplier: 0.5),
             // reliseLabel.heightAnchor.constraint(equalTo: ratingLabel.heightAnchor),
             reliseLabel.bottomAnchor.constraint(equalTo: ratingLabel.bottomAnchor)
         ])
