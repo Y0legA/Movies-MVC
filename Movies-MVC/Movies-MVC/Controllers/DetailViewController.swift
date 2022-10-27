@@ -23,6 +23,7 @@ final class DetailViewController: UIViewController {
 
     // MARK: - Public Properties
 
+    var id = Constants.emptyString
     var imageName = Constants.emptyString
     var movieName = Constants.emptyString
     var movieDescription = Constants.emptyString
@@ -31,6 +32,10 @@ final class DetailViewController: UIViewController {
 
     // MARK: - Private Properties
 
+    var networkManager = NetworkManager()
+    var keyTiser = String()
+    var tiser: [TiserDetail] = []
+
     // MARK: - Initializers
 
     // MARK: - LifeCycle
@@ -38,25 +43,51 @@ final class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        fetchTiserUrl()
     }
 
     // MARK: - Public Methods
 
     // MARK: - Private IBAction
 
-    private func createActors() {
-        var yyyy = 0
-        let image = UIImageView()
-        for actor in actorImageNames {
-            image.loadImage(baseUrlString: Url.imagePath, urlImage: actor)
-            view.addSubview(image)
-            image.frame = CGRect(x: 0, y: yyyy, width: 50, height: 50)
-            yyyy += 10
-        }
+    @objc private func handleTapAction(_ recognizer: UIGestureRecognizer) {
+        let selectVC = TiserViewController()
+        let barButtonItem = UIBarButtonItem()
+        navigationItem.backBarButtonItem = barButtonItem
+        selectVC.videoUrl = keyTiser
+        navigationController?.pushViewController(selectVC, animated: true)
+//        networkManager.fetchTiserResult(id) { tiserInfo in
+//            DispatchQueue.main.async {
+//                guard let result = try? tiserInfo.get().results else { return }
+//                // tiser = result
+//                selectVC.videoUrl = keyTiser
+//            }
+//        }
     }
 
     // MARK: - Private Methods
 
+    private func fetchTiserUrl() {
+        networkManager.fetchTiserResult(id) { tiserInfo in
+            DispatchQueue.main.async {
+                guard let result = try? tiserInfo.get().results else { return }
+                self.keyTiser = result.first?.key ?? ""
+                print(self.keyTiser)
+            }
+        }
+    }
+
+//    private func createActors() {
+//           var yyyy = 0
+//           let image = UIImageView()
+//           for actor in actorImageNames {
+//               image.loadImage(baseUrlString: Url.imagePath, urlImage: actor)
+//               view.addSubview(image)
+//               image.frame = CGRect(x: 0, y: yyyy, width: 50, height: 50)
+//               yyyy += 10
+//           }
+//       }
+//
     private func configureUI() {
         setBackgroundImage()
         configureActorsDetailScrollVew()
@@ -81,6 +112,10 @@ final class DetailViewController: UIViewController {
             posterImageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.7),
             posterImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5)
         ])
+        let recognizer = UITapGestureRecognizer()
+        recognizer.addTarget(self, action: #selector(handleTapAction))
+        posterImageView.isUserInteractionEnabled = true
+        posterImageView.addGestureRecognizer(recognizer)
     }
 
     private func configureDescriptionLabel() {

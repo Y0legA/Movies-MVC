@@ -18,6 +18,8 @@
 		849334FE290958CA00697E68 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849334FD290958CA00697E68 /* DetailViewController.swift */; };
 		849335012909626900697E68 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 849335002909626900697E68 /* Colors.xcassets */; };
 		84933503290A88F700697E68 /* ActorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84933502290A88F500697E68 /* ActorView.swift */; };
+		849ACDD5290B23EF00DD29BC /* TiserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849ACDD4290B23EF00DD29BC /* TiserViewController.swift */; };
+		849ACDD7290B28A600DD29BC /* TiserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849ACDD6290B28A600DD29BC /* TiserInfo.swift */; };
 		84C0B275290680A70032F5BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C0B274290680A70032F5BC /* AppDelegate.swift */; };
 		84C0B277290680A70032F5BC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C0B276290680A70032F5BC /* SceneDelegate.swift */; };
 		84C0B279290680A70032F5BC /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C0B278290680A70032F5BC /* HomeViewController.swift */; };
@@ -38,6 +40,8 @@
 		849334FD290958CA00697E68 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		849335002909626900697E68 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		84933502290A88F500697E68 /* ActorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActorView.swift; sourceTree = "<group>"; };
+		849ACDD4290B23EF00DD29BC /* TiserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiserViewController.swift; sourceTree = "<group>"; };
+		849ACDD6290B28A600DD29BC /* TiserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiserInfo.swift; sourceTree = "<group>"; };
 		84C0B271290680A70032F5BC /* Movies-MVC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movies-MVC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		84C0B274290680A70032F5BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84C0B276290680A70032F5BC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +77,7 @@
 			children = (
 				84C0B278290680A70032F5BC /* HomeViewController.swift */,
 				849334FD290958CA00697E68 /* DetailViewController.swift */,
+				849ACDD4290B23EF00DD29BC /* TiserViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -91,6 +96,7 @@
 				848AF3372906CDE500E4D3DC /* MovieInfo.swift */,
 				8449827E29080FC900FE176A /* NetworkInfo.swift */,
 				849334FB290927B600697E68 /* NetworkDetail.swift */,
+				849ACDD6290B28A600DD29BC /* TiserInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -293,7 +299,9 @@
 				84C0B277290680A70032F5BC /* SceneDelegate.swift in Sources */,
 				8449827B29080D4100FE176A /* Url.swift in Sources */,
 				849334FA29091F5400697E68 /* Extention+ImageView.swift in Sources */,
+				849ACDD7290B28A600DD29BC /* TiserInfo.swift in Sources */,
 				84933503290A88F700697E68 /* ActorView.swift in Sources */,
+				849ACDD5290B23EF00DD29BC /* TiserViewController.swift in Sources */,
 				848AF3362906C91000E4D3DC /* MovieTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

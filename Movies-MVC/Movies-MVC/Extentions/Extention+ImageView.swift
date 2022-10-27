@@ -1,4 +1,4 @@
-// extention+ImageView.swift
+// Extention+ImageView.swift
 // Copyright © RoadMap. All rights reserved.
 
 import UIKit

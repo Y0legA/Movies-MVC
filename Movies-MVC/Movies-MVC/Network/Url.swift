@@ -14,6 +14,8 @@ enum Url {
     static let movie = "/3/movie/"
     static let credits = "/credits"
     static let page = "page"
+    static let youTube = "https://www.youtube.com/watch?v="
+    static let videos = "/videos"
 
     static let moviePopular = "/3/discover/movie?primary_release_year=2057&sort_by=vote_average.desc"
 }

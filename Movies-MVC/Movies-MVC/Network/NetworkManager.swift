@@ -52,6 +52,17 @@ final class NetworkManager {
         url.append(queryItems: [
             URLQueryItem(name: Constants.apikey, value: Url.apiKey)
         ])
+        print(url)
+        getJson(url: url, completion: completion)
+    }
+
+    func fetchTiserResult(_ id: String, completion: @escaping (Result<Tiser, Error>) -> ()) {
+        let urlString = Url.baseUrl + Url.movie + String(id) + Url.videos
+        guard var url = URL(string: urlString) else { return }
+        url.append(queryItems: [
+            URLQueryItem(name: Constants.apikey, value: Url.apiKey)
+        ])
+        print(url)
         getJson(url: url, completion: completion)
     }
 

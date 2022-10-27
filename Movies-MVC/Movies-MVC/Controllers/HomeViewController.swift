@@ -224,6 +224,7 @@ extension HomeViewController: UITableViewDataSource {
             DispatchQueue.main.async {
                 detailVC.title = detailMovie.title
                 guard let movieDetail = try? movie.get().cast else { return }
+                detailVC.id = String(detailMovie.id)
                 detailVC.movieDescription = detailMovie.overview
                 detailVC.actorNames = movieDetail.map { $0.name ?? "" }
                 detailVC.actorImageNames = movieDetail.map { $0.profilePath ?? "" }
