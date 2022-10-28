@@ -5,16 +5,10 @@ import UIKit
 
 // Вью информации по актеру
 final class ActorView: UIView {
-    // MARK: - Private IBoutlet
-
     // MARK: - Private Visual Components
 
     private let actorImageView = UIImageView()
     private let actorNameLabel = UILabel()
-
-    // MARK: - Public Properties
-
-    // MARK: - Private Properties
 
     // MARK: - Initializers
 
@@ -35,8 +29,6 @@ final class ActorView: UIView {
         actorNameLabel.text = name
     }
 
-    // MARK: - Private IBAction
-
     // MARK: - Private Methods
 
     private func configureUI() {
@@ -46,6 +38,7 @@ final class ActorView: UIView {
 
     private func configurePosterImageView() {
         actorImageView.contentMode = .scaleAspectFill
+        actorImageView.layer.cornerRadius = 5
         actorImageView.clipsToBounds = true
         actorImageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(actorImageView)
@@ -65,8 +58,7 @@ final class ActorView: UIView {
         NSLayoutConstraint.activate([
             actorNameLabel.topAnchor.constraint(equalTo: actorImageView.bottomAnchor, constant: 10),
             actorNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            actorNameLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9),
-            // descriptionLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.3)
+            actorNameLabel.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.9)
         ])
     }
 }

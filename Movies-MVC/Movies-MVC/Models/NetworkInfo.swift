@@ -6,7 +6,7 @@ struct Results: Codable {
     let results: [Movie]
 }
 
-/// Модель фильма
+///
 struct Movie: Codable {
     let overview: String
     let releaseDate: String

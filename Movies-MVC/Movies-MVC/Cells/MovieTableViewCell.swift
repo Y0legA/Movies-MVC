@@ -26,7 +26,6 @@ final class MovieTableViewCell: UITableViewCell {
     // Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
         configureUI()
     }
 
@@ -39,7 +38,6 @@ final class MovieTableViewCell: UITableViewCell {
 
     func setDescription(model: Movie) {
         movieNameLabel.text = model.title
-
         ratingLabel.text = String(model.voteAverage)
         reliseLabel.text = model.releaseDate
         movieImageView.loadImage(baseUrlString: Url.imagePath, urlImage: model.poster)

@@ -4,7 +4,6 @@
 import Foundation
 
 // Сетевой слой
-
 final class NetworkManager {
     private enum Constants {
         static let apikey = "api_key"
@@ -15,33 +14,17 @@ final class NetworkManager {
 
     // MARK: - Public methods
 
-    func fetchPopularyResult(_ currentPage: Int, completion: @escaping (Result<Results, Error>) -> ()) {
-        let urlString = Url.baseUrl + Url.populary
+    func fetchMoviesResult(
+        _ estimateUrl: String,
+        _ currentPage: Int,
+        completion: @escaping (Result<Results, Error>) -> ()
+    ) {
+        let urlString = Url.baseUrl + estimateUrl
         guard var url = URL(string: urlString) else { return }
         url.append(queryItems: [
             URLQueryItem(name: Constants.apikey, value: Url.apiKey),
             URLQueryItem(name: Constants.language, value: Url.suffixRu),
-            URLQueryItem(name: Constants.page, value: String(currentPage)),
-        ])
-        getJson(url: url, completion: completion)
-    }
-
-    func fetchTopRatedResult(_ currentPage: Int, completion: @escaping (Result<Results, Error>) -> ()) {
-        let urlString = Url.baseUrl + Url.topRated
-        guard var url = URL(string: urlString) else { return }
-        url.append(queryItems: [
-            URLQueryItem(name: Constants.apikey, value: Url.apiKey),
-            URLQueryItem(name: Constants.language, value: Url.suffixRu),
-        ])
-        getJson(url: url, completion: completion)
-    }
-
-    func fetchUpComingResult(_ currentPage: Int, completion: @escaping (Result<Results, Error>) -> ()) {
-        let urlString = Url.baseUrl + Url.upComing
-        guard var url = URL(string: urlString) else { return }
-        url.append(queryItems: [
-            URLQueryItem(name: Constants.apikey, value: Url.apiKey),
-            URLQueryItem(name: Constants.language, value: Url.suffixRu),
+            URLQueryItem(name: Constants.page, value: String(currentPage))
         ])
         getJson(url: url, completion: completion)
     }
@@ -52,17 +35,15 @@ final class NetworkManager {
         url.append(queryItems: [
             URLQueryItem(name: Constants.apikey, value: Url.apiKey)
         ])
-        print(url)
         getJson(url: url, completion: completion)
     }
 
     func fetchTiserResult(_ id: String, completion: @escaping (Result<Tiser, Error>) -> ()) {
-        let urlString = Url.baseUrl + Url.movie + String(id) + Url.videos
+        let urlString = Url.baseUrl + Url.movie + id + Url.videos
         guard var url = URL(string: urlString) else { return }
         url.append(queryItems: [
             URLQueryItem(name: Constants.apikey, value: Url.apiKey)
         ])
-        print(url)
         getJson(url: url, completion: completion)
     }
 

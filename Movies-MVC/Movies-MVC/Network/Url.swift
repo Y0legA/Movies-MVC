@@ -1,7 +1,7 @@
 // Url.swift
 // Copyright © RoadMap. All rights reserved.
 
-///
+// Составляющие запроса
 enum Url {
     static let baseUrl = "https://api.themoviedb.org"
     static let startList = "/3/movie/now_playing"
@@ -16,8 +16,4 @@ enum Url {
     static let page = "page"
     static let youTube = "https://www.youtube.com/watch?v="
     static let videos = "/videos"
-
-    static let moviePopular = "/3/discover/movie?primary_release_year=2057&sort_by=vote_average.desc"
 }
-
-// https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=799ad00db48f25949a3aaea920d756d6&language=ru-RU
