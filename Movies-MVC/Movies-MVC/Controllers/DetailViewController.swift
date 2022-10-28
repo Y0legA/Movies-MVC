@@ -54,7 +54,18 @@ final class DetailViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
     }
-
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        var yCoord = castLabel.frame.maxY + 20
+        for actor in actors {
+            actor.frame = CGRect(x: 0, y: yCoord, width: view.bounds.width, height: view.bounds.width)
+            movieDetailScrollVew.addSubview(actor)
+            yCoord += view.bounds.width - 50
+        }
+        movieDetailScrollVew.contentSize = CGSize(width: view.bounds.width, height: yCoord)
+    }
+    
     // MARK: - Private IBAction
 
     @objc private func showTizerAction() {
@@ -247,15 +258,5 @@ final class DetailViewController: UIViewController {
             actor.configureView(actorDetails, actorImageNames[index])
             actors.append(actor)
         }
-    }
-
-    override func viewDidLayoutSubviews() {
-        var yCoord = castLabel.frame.maxY + 20
-        for actor in actors {
-            actor.frame = CGRect(x: 0, y: yCoord, width: view.bounds.width, height: view.bounds.width)
-            movieDetailScrollVew.addSubview(actor)
-            yCoord += view.bounds.width - 50
-        }
-        movieDetailScrollVew.contentSize = CGSize(width: view.bounds.width, height: yCoord)
     }
 }
