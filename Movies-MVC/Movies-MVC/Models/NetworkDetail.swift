@@ -3,11 +3,11 @@
 
 // Модель для получения данных по актерам
 struct Detail: Codable {
-    let cast: [MovieDetail]?
+    let casts: [Cast]?
 }
 
-///
-struct MovieDetail: Codable {
+// Модель для получения данных по актеру
+struct Cast: Codable {
     let name: String?
     let profilePath: String?
 

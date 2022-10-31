@@ -6,6 +6,10 @@ import WebKit
 
 // Экран тизера
 final class TiserViewController: UIViewController {
+    // MARK: - Public Properties
+
+    var videoUrlString = String()
+
     // MARK: - Private Visual Componrnts
 
     private lazy var webView: WKWebView = {
@@ -15,8 +19,6 @@ final class TiserViewController: UIViewController {
         ))
         return webWiew
     }()
-
-    var videoUrl = String()
 
     // MARK: - LifeCycle
 
@@ -37,7 +39,7 @@ final class TiserViewController: UIViewController {
     }
 
     private func configureWebView() {
-        let url = URL(string: Url.youTube + videoUrl)
+        let url = URL(string: Url.youTube + videoUrlString)
         guard let url = url else { return }
         let request = URLRequest(url: url)
         webView.load(request)

@@ -13,10 +13,10 @@ final class HomeViewController: UIViewController {
         }
 
         static let title = "Movies"
-        static let backGroundView = "backGround"
-        static let backGroundColor = "backgroundColor"
+        static let backGroundViewName = "backGround"
+        static let backGroundColorName = "backgroundColor"
         static let movieIdentifier = "movie"
-        static let heightButton = 30.0
+        static let heightButtonDouble = 30.0
     }
 
     // MARK: - Private Visual Components
@@ -51,9 +51,10 @@ final class HomeViewController: UIViewController {
         currentPage = 1
         currentRow = 0
         movies = []
-        networkManager.fetchMoviesResult(Url.populary, currentPage) { movies in
+        networkManager.fetchMoviesResult(Url.populary, currentPage) { [weak self] movies in
             DispatchQueue.main.async {
-                guard let result = try? movies.get().results else { return }
+                guard let result = try? movies.get().movies else { return }
+                guard let self = self else { return }
                 self.movies = result
                 self.title = Constants.MovieTypes.popular.rawValue
                 self.tableView.reloadData()
@@ -66,9 +67,10 @@ final class HomeViewController: UIViewController {
         currentPage = 1
         currentRow = 0
         movies = []
-        networkManager.fetchMoviesResult(Url.topRated, currentPage) { movies in
+        networkManager.fetchMoviesResult(Url.topRated, currentPage) { [weak self] movies in
             DispatchQueue.main.async {
-                guard let result = try? movies.get().results else { return }
+                guard let result = try? movies.get().movies else { return }
+                guard let self = self else { return }
                 self.movies = result
                 self.title = Constants.MovieTypes.topRated.rawValue
                 self.tableView.reloadData()
@@ -81,9 +83,10 @@ final class HomeViewController: UIViewController {
         currentPage = 1
         currentRow = 0
         movies = []
-        networkManager.fetchMoviesResult(Url.upComing, currentPage) { movies in
+        networkManager.fetchMoviesResult(Url.upComing, currentPage) { [weak self] movies in
             DispatchQueue.main.async {
-                guard let result = try? movies.get().results else { return }
+                guard let result = try? movies.get().movies else { return }
+                guard let self = self else { return }
                 self.movies = result
                 self.title = Constants.MovieTypes.upComing.rawValue
                 self.tableView.reloadData()
@@ -109,7 +112,7 @@ final class HomeViewController: UIViewController {
     }
 
     private func configureView() {
-        view.backgroundColor = UIColor(named: Constants.backGroundColor)
+        view.backgroundColor = UIColor(named: Constants.backGroundColorName)
         title = Constants.title
     }
 
@@ -120,11 +123,15 @@ final class HomeViewController: UIViewController {
         popularButton.backgroundColor = .systemTeal
         popularButton.layer.cornerRadius = 7
         popularButton.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsPopularButton()
+    }
+
+    private func configureConstraintsPopularButton() {
         NSLayoutConstraint.activate([
             popularButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             popularButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30),
             popularButton.widthAnchor.constraint(equalToConstant: 100),
-            popularButton.heightAnchor.constraint(equalToConstant: Constants.heightButton)
+            popularButton.heightAnchor.constraint(equalToConstant: Constants.heightButtonDouble)
         ])
     }
 
@@ -135,11 +142,15 @@ final class HomeViewController: UIViewController {
         topRatedButton.backgroundColor = .systemTeal
         topRatedButton.layer.cornerRadius = 7
         topRatedButton.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsTopRatedButton()
+    }
+
+    private func configureConstraintsTopRatedButton() {
         NSLayoutConstraint.activate([
             topRatedButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             topRatedButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             topRatedButton.widthAnchor.constraint(equalToConstant: 100),
-            topRatedButton.heightAnchor.constraint(equalToConstant: Constants.heightButton)
+            topRatedButton.heightAnchor.constraint(equalToConstant: Constants.heightButtonDouble)
         ])
     }
 
@@ -151,23 +162,31 @@ final class HomeViewController: UIViewController {
         upComingButton.layer.cornerRadius = 7
         upComingButton.backgroundColor = .systemTeal
         upComingButton.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsUpComingButton()
+    }
+
+    private func configureConstraintsUpComingButton() {
         NSLayoutConstraint.activate([
             upComingButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             upComingButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30),
             upComingButton.widthAnchor.constraint(equalToConstant: 100),
-            upComingButton.heightAnchor.constraint(equalToConstant: Constants.heightButton)
+            upComingButton.heightAnchor.constraint(equalToConstant: Constants.heightButtonDouble)
         ])
     }
 
     private func configureTableview() {
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundView = UIImageView(image: UIImage(named: Constants.backGroundView))
+        tableView.backgroundView = UIImageView(image: UIImage(named: Constants.backGroundViewName))
         tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: Constants.movieIdentifier)
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsTableview()
+    }
+
+    private func configureConstraintsTableview() {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: topRatedButton.bottomAnchor, constant: 10),
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -179,6 +198,40 @@ final class HomeViewController: UIViewController {
     private func setPadding() {
         currentRow += 20
         tableView.reloadData()
+    }
+
+    private func setPropertisDetailVC(_ movie: Movie) -> DetailViewController {
+        let detailVC = DetailViewController()
+        detailVC.imageName = movie.poster
+        detailVC.title = movie.title
+        detailVC.rating = movie.voteAverage
+        detailVC.relize = movie.releaseDate
+        detailVC.movieDescription = movie.overview
+        detailVC.id = String(movie.id)
+        return detailVC
+    }
+
+    private func showDetailVC(_ id: Int, _ detailVC: DetailViewController) {
+        networkManager.fetchCreditsResult(id) { [weak self] movie in
+            DispatchQueue.main.async {
+                guard let movieDetail = try? movie.get().casts else { return }
+                detailVC.actorNames = movieDetail.map { $0.name ?? "" }
+                detailVC.actorImageNames = movieDetail.map { $0.profilePath ?? "" }
+                self?.navigationController?.pushViewController(detailVC, animated: true)
+            }
+        }
+    }
+
+    private func configurePadding(_ url: String) {
+        currentPage += 1
+        networkManager.fetchMoviesResult(url, currentPage) { [weak self] movies in
+            DispatchQueue.main.async {
+                guard let result = try? movies.get().movies else { return }
+                guard let self = self else { return }
+                self.movies += result
+                self.setPadding()
+            }
+        }
     }
 }
 
@@ -198,55 +251,15 @@ extension HomeViewController: UITableViewDataSource {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailMovie = movies[indexPath.row]
-        let detailVC = DetailViewController()
-        detailVC.imageName = detailMovie.poster
-        networkManager.fetchCreditsResult(detailMovie.id) { movie in
-            DispatchQueue.main.async {
-                detailVC.title = detailMovie.title
-                guard let movieDetail = try? movie.get().cast else { return }
-                detailVC.id = String(detailMovie.id)
-                detailVC.movieDescription = detailMovie.overview
-                detailVC.actorNames = movieDetail.map { $0.name ?? "" }
-                detailVC.actorImageNames = movieDetail.map { $0.profilePath ?? "" }
-                detailVC.rating = detailMovie.voteAverage
-                detailVC.relize = detailMovie.releaseDate
-                self.navigationController?.pushViewController(detailVC, animated: true)
-            }
-        }
-    }
-
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row == currentRow + 18 {
             switch title {
             case Constants.MovieTypes.popular.rawValue:
-                currentPage += 1
-                networkManager.fetchMoviesResult(Url.populary, currentPage) { movies in
-                    DispatchQueue.main.async {
-                        guard let result = try? movies.get().results else { return }
-                        self.movies += result
-                        self.setPadding()
-                    }
-                }
+                configurePadding(Url.populary)
             case Constants.MovieTypes.topRated.rawValue:
-                currentPage += 1
-                networkManager.fetchMoviesResult(Url.topRated, currentPage) { movies in
-                    DispatchQueue.main.async {
-                        guard let result = try? movies.get().results else { return }
-                        self.movies += result
-                        self.setPadding()
-                    }
-                }
+                configurePadding(Url.topRated)
             case Constants.MovieTypes.upComing.rawValue:
-                currentPage += 1
-                networkManager.fetchMoviesResult(Url.upComing, currentPage) { movies in
-                    DispatchQueue.main.async {
-                        guard let result = try? movies.get().results else { return }
-                        self.movies += result
-                        self.setPadding()
-                    }
-                }
+                configurePadding(Url.upComing)
             default:
                 break
             }
@@ -260,4 +273,10 @@ extension HomeViewController: UITableViewDataSource {
 
 // MARK: - UITableViewDelegate
 
-extension HomeViewController: UITableViewDelegate {}
+extension HomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailMovie = movies[indexPath.row]
+        let detailVC = setPropertisDetailVC(detailMovie)
+        showDetailVC(detailMovie.id, detailVC)
+    }
+}

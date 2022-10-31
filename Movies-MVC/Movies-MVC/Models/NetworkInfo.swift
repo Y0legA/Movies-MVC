@@ -1,12 +1,12 @@
 // NetworkInfo.swift
 // Copyright © RoadMap. All rights reserved.
 
-/// Модель списка фильмов
+// Модель для получения данных по фильмам
 struct Results: Codable {
-    let results: [Movie]
+    let movies: [Movie]
 }
 
-///
+// Модель для получения данных по фильму
 struct Movie: Codable {
     let overview: String
     let releaseDate: String

@@ -67,6 +67,10 @@ final class MovieTableViewCell: UITableViewCell {
         contView.clipsToBounds = true
         contView.layer.borderColor = UIColor.cyan.cgColor
         contView.layer.borderWidth = 2
+        configureConstraintsContentView()
+    }
+
+    private func configureConstraintsContentView() {
         NSLayoutConstraint.activate([
             contView.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             contView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
@@ -81,6 +85,10 @@ final class MovieTableViewCell: UITableViewCell {
         movieImageView.layer.cornerRadius = 20
         movieImageView.clipsToBounds = true
         movieImageView.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsMovieImageView()
+    }
+
+    private func configureConstraintsMovieImageView() {
         NSLayoutConstraint.activate([
             movieImageView.topAnchor.constraint(equalTo: contView.topAnchor),
             movieImageView.leftAnchor.constraint(equalTo: contView.leftAnchor),
@@ -94,6 +102,10 @@ final class MovieTableViewCell: UITableViewCell {
         movieNameLabel.font = UIFont.avenirNextDemiBold16()
         movieNameLabel.textAlignment = .center
         movieNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsMovieNameLabel()
+    }
+
+    private func configureConstraintsMovieNameLabel() {
         NSLayoutConstraint.activate([
             movieNameLabel.topAnchor.constraint(equalTo: contView.topAnchor, constant: 10),
             movieNameLabel.leadingAnchor.constraint(equalTo: movieImageView.trailingAnchor),
@@ -108,6 +120,10 @@ final class MovieTableViewCell: UITableViewCell {
         movieDescriptionLabel.numberOfLines = 0
         movieDescriptionLabel.textAlignment = .natural
         movieDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsMovieDescriptionLabel()
+    }
+
+    private func configureConstraintsMovieDescriptionLabel() {
         NSLayoutConstraint.activate([
             movieDescriptionLabel.topAnchor.constraint(equalTo: movieNameLabel.bottomAnchor),
             movieDescriptionLabel.leadingAnchor.constraint(equalTo: movieImageView.trailingAnchor, constant: 10),
@@ -124,11 +140,14 @@ final class MovieTableViewCell: UITableViewCell {
         ratingLabel.layer.borderWidth = 1
         ratingLabel.layer.borderColor = UIColor.systemMint.cgColor
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsRatingLabel()
+    }
+
+    private func configureConstraintsRatingLabel() {
         NSLayoutConstraint.activate([
             ratingLabel.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor),
             ratingLabel.leadingAnchor.constraint(equalTo: movieImageView.trailingAnchor, constant: 30),
             ratingLabel.widthAnchor.constraint(equalTo: movieDescriptionLabel.widthAnchor, multiplier: 0.1),
-            // ratingLabel.heightAnchor.constraint(equalTo: contView.heightAnchor, multiplier: 0.1),
             ratingLabel.bottomAnchor.constraint(equalTo: contView.bottomAnchor, constant: -10)
         ])
     }
@@ -137,11 +156,14 @@ final class MovieTableViewCell: UITableViewCell {
         contView.addSubview(reliseLabel)
         reliseLabel.textAlignment = .center
         reliseLabel.translatesAutoresizingMaskIntoConstraints = false
+        configureConstraintsRelizeLabel()
+    }
+
+    private func configureConstraintsRelizeLabel() {
         NSLayoutConstraint.activate([
             reliseLabel.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor),
             reliseLabel.trailingAnchor.constraint(equalTo: contView.trailingAnchor, constant: -10),
             reliseLabel.widthAnchor.constraint(equalTo: movieDescriptionLabel.widthAnchor, multiplier: 0.5),
-            // reliseLabel.heightAnchor.constraint(equalTo: ratingLabel.heightAnchor),
             reliseLabel.bottomAnchor.constraint(equalTo: ratingLabel.bottomAnchor)
         ])
     }

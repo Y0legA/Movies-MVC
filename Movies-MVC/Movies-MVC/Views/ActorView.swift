@@ -42,6 +42,10 @@ final class ActorView: UIView {
         actorImageView.clipsToBounds = true
         actorImageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(actorImageView)
+        configureConstraintsPosterImageView()
+    }
+
+    private func configureConstraintsPosterImageView() {
         NSLayoutConstraint.activate([
             actorImageView.topAnchor.constraint(equalTo: topAnchor),
             actorImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -55,6 +59,10 @@ final class ActorView: UIView {
         actorNameLabel.translatesAutoresizingMaskIntoConstraints = false
         actorNameLabel.setContentHuggingPriority(.defaultHigh, for: .vertical)
         addSubview(actorNameLabel)
+        configureConstraintsActorNameLabel()
+    }
+
+    private func configureConstraintsActorNameLabel() {
         NSLayoutConstraint.activate([
             actorNameLabel.topAnchor.constraint(equalTo: actorImageView.bottomAnchor, constant: 10),
             actorNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
